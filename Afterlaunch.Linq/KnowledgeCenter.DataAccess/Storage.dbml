@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Database Name="KnowledgeCenter" Class="KnowledgeCenterDataContext" Serialization="Unidirectional" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=KnowledgeCenter;Persist Security Info=True;User ID=kcenter_user;Application Name=KnowledgeCenter" SettingsObjectName="KnowledgeCenter.DataAccess.My.MySettings" SettingsPropertyName="KnowledgeCenterConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.ArticleCategoryMappings" Member="ArticleCategoryMappings">
+    <Type Name="ArticleCategoryMapping">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ArticleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CategoryId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Article_ArticleCategoryMapping" Member="Article" ThisKey="ArticleId" Type="Article" IsForeignKey="true" />
+      <Association Name="Category_ArticleCategoryMapping" Member="Category" ThisKey="CategoryId" Type="Category" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ArticleRatings" Member="ArticleRatings">
+    <Type Name="ArticleRating">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ArticleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Rating" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Username" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
+      <Association Name="Article_ArticleRating" Member="Article" ThisKey="ArticleId" Type="Article" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Articles" Member="Articles">
+    <Type Name="Article">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="Teaser" Type="System.String" DbType="NVarChar(2000)" CanBeNull="true" />
+      <Column Name="Text" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Views" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Rating" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="AuthorName" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
+      <Column Name="IsPublished" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DateEdit" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="[Level]" Member="Level" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FriendlyUrl" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Column Name="OldId" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
+      <Association Name="Article_ArticleCategoryMapping" Member="ArticleCategoryMappings" OtherKey="ArticleId" Type="ArticleCategoryMapping" />
+      <Association Name="Article_ArticleRating" Member="ArticleRatings" OtherKey="ArticleId" Type="ArticleRating" />
+      <Association Name="Article_ArticleTagMapping" Member="ArticleTagMappings" OtherKey="ArticleId" Type="ArticleTagMapping" />
+      <Association Name="Article_Comment" Member="Comments" OtherKey="ArticleId" Type="Comment" />
+      <Association Name="Article_RelatedArticle" Member="RelatedArticles" Storage="_RelatedArticleMappings" OtherKey="ArticleId" Type="RelatedArticle" />
+      <Association Name="Article_Asset" Member="Assets" OtherKey="ArticleId" Type="Asset" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ArticleTagMappings" Member="ArticleTagMappings">
+    <Type Name="ArticleTagMapping">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TagId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ArticleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Article_ArticleTagMapping" Member="Article" ThisKey="ArticleId" Type="Article" IsForeignKey="true" />
+      <Association Name="Tag_ArticleTagMapping" Member="Tag" ThisKey="TagId" Type="Tag" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Comments" Member="Comments">
+    <Type Name="Comment">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ArticleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Text" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="IsApproved" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="DateCreated" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AuthorName" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
+      <Association Name="Article_Comment" Member="Article" ThisKey="ArticleId" Type="Article" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Tags" Member="Tags">
+    <Type Name="Tag">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(2000)" CanBeNull="true" />
+      <Column Name="Score" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="Tag_ArticleTagMapping" Member="ArticleTagMappings" OtherKey="TagId" Type="ArticleTagMapping" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RelatedArticleMappings" Member="RelatedArticles">
+    <Type Name="RelatedArticle">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ArticleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
+      <Column Name="ArticleUrl" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
+      <Association Name="Article_RelatedArticle" Member="Article" ThisKey="ArticleId" Type="Article" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Assets" Member="Assets">
+    <Type Name="Asset">
+      <Column Name="Id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ArticleId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(2000)" CanBeNull="true" />
+      <Column Name="NavigateUrl" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="AttachmentType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsActivated" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="DateEdit" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ContentType" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="OldId" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
+      <Association Name="Article_Asset" Member="Article" ThisKey="ArticleId" Type="Article" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Categories" Member="Categories">
+    <Type Name="Category">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ParentId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="FriendlyUrl" Type="System.String" DbType="NVarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="OldId" Type="System.String" DbType="NVarChar(256)" CanBeNull="true" />
+      <Column Name="LongTitle" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="OrderIndex" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Category_ArticleCategoryMapping" Member="ArticleCategoryMappings" OtherKey="CategoryId" Type="ArticleCategoryMapping" />
+      <Association Name="Category_Category" Member="Category" ThisKey="ParentId" Type="Category" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.IncreaseArticlesViewsByArticleId" Method="IncreaseArticlesViewsByArticleId">
+    <Parameter Name="ArticleId" Parameter="articleId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>
